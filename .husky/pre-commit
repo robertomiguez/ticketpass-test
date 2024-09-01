@@ -1,0 +1,5 @@
+if [ -n "$(git ls-files 'src/**/*.test.{js,ts}')" ]; then
+  npm test
+else
+  echo "No test files found, skipping tests."
+fi
