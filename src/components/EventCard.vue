@@ -16,6 +16,12 @@
     </div>
     <div class="p-4">
       <h3 class="text-lg font-bold text-green-800">{{ event.title }}</h3>
+      <CalendarEvent
+        :start="event.start"
+        startFormat="dateTime"
+        :end="event.end"
+        endFormat="time"
+      />
 
       <div class="mt-4 flex justify-between items-center">
         <span class="text-lg font-semibold text-green-800"
@@ -35,6 +41,7 @@
 <script setup lang="ts">
 import { defineProps, defineEmits } from 'vue';
 import type { Event } from '@/types/Event';
+import CalendarEvent from './CalendarEvent.vue';
 
 defineProps<{
   event: Event;
