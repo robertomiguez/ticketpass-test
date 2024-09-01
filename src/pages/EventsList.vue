@@ -7,6 +7,7 @@
         v-for="event in paginatedEvents"
         :key="event.id"
         :event="event"
+        @view="viewEvent(event)"
         class="p-1"
       />
     </div>
@@ -16,6 +17,11 @@
       :currentPage="currentPage"
       @change-page="currentPage = $event"
     />
+    <EventDetailModal
+      :event="selectedEvent"
+      :isVisible="isModalVisible"
+      @close="closeModal"
+    />
   </div>
 </template>
 
@@ -24,11 +30,15 @@ import { ref, computed } from 'vue';
 import EventCard from '@/components/EventCard.vue';
 import Pagination from '@/components/PaginationEvent.vue';
 import { getEvents } from '@/services/EventService';
+import EventDetailModal from '@/components/modal/EventDetailModal.vue';
 import type { Event as EventType } from '@/types/Event';
 
+const emit = defineEmits(['close-modal']);
 const events = ref<EventType[]>([]);
 const currentPage = ref(1);
 const eventsPerPage = 8;
+const isModalVisible = ref(false);
+const selectedEvent = ref<EventType | null>(null);
 
 // function to assign prices to events
 // price usually comes from the backend
@@ -55,4 +65,14 @@ const paginatedEvents = computed(() => {
 const totalPages = computed(() =>
   Math.ceil(events.value.length / eventsPerPage),
 );
+
+const viewEvent = (event: EventType) => {
+  selectedEvent.value = events.value.find(e => e.id === event.id) || null;
+  isModalVisible.value = true;
+};
+
+const closeModal = () => {
+  isModalVisible.value = false;
+  emit('close-modal');
+};
 </script>
